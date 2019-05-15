@@ -1,34 +1,52 @@
-.autoSelect{
-  overflow: scroll;
-  max-height:250px;
-  border:1px solid #cacaca;
+.reactDatalist_input{
+  width:100%;
+  box-sizing: border-box;
 }
 
-.autoSelect::-webkit-scrollbar{
+.reactDatalist_show{
+  width:100%;
+}
+
+.reactDatalist_hide{
   display: none;
 }
 
-.noBottomMargin{
-    margin:0px!important;
+.reactDatalist_options{
+  overflow: scroll;
+  max-height:150px;
+  border:1px solid #cacaca;
 }
 
-.styleList{
-  list-style-type:none!important;
-  margin:0px 10px;
+.reactDatalist_options::-webkit-scrollbar{
+  display: none;
 }
 
-.styleList li {
-  margin:10px 0px;
-  padding: 0px 2px;
+.reactDatalist_options_list{
+  padding: 0;
+  margin:0 5px;
+  list-style-type:none;
 }
 
-.styleList li:hover{
-  background-color: #0581C2!important;
-  border-radius: 7px!important;
+.reactDatalist_options_list li {
+  clear:both;
+  height: 20px;
+  margin:8px 1px;
+  padding:3px 2px;
 }
 
-.styleList li:hover *{
-color:#FFF!important;
+
+.reactDatalist_options_list li .float-right{
+  float: right !important;
+}
+.reactDatalist_options_list li .float-left{
+  float: left !important;
+}
+
+
+.reactDatalist_options_list li:hover{
+  background-color: #0581C2;
+  border-radius: 2px;
+  color:#FFF;
 }
 
 .styleList li a{

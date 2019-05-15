@@ -72,32 +72,28 @@ class DataList extends Component {
 
   renderOptions() {
     var options;
-    if (this.state.showMoreOptions) {
-      options = this.props.options
+    options = this.props.options
         .filter((value) => RegExp('^' + this.state.inputFieldText + '.*', 'i').test(value[this.props.value2]) || RegExp('^' + this.state.inputFieldText + '.*', 'i').test(value[this.props.value1]))
         .map((option) => {
           return <li value={option[this.props.value1]} key={option[this.props.id]} className='clearfix' onMouseDown={() => this.handleSelect(option[this.props.id])}>
             <a> <span className='float-left'>{option[this.props.value1]} </span><span className='float-right'>{option[this.props.value2]}</span> </a>
           </li>;
         });
+    if (!this.state.showMoreOptions) {
+      if(options.length > 10){
+        options = options.slice(0,10);
+        options.push(<li key='11' onMouseDown={() => this.handleMoreOptions()}><a>more options</a></li>);
+      }
     }
-    else{
-      options = this.props.options
-        .filter((value) => RegExp('^' + this.state.inputFieldText + '.*', 'i').test(value[this.props.value2]) || RegExp('^' + this.state.inputFieldText + '.*', 'i').test(value[this.props.value1]))
-        .slice(0, 10)
-        .map((option) => {
-          return <li value={option[this.props.value1]} key={option[this.props.id]} className='clearfix' onMouseDown={() => this.handleSelect(option[this.props.id])}>
-            <a> <span className='float-left'>{option[this.props.value1]} </span><span className='float-right'>{option[this.props.value2]}</span> </a>
-          </li>;
-        });
-      options.push(<li key='11' onMouseDown={() => this.handleMoreOptions()}><a>more options</a></li>);
-    }
+    
+
+    
     
     return (
    
-      <div className={this.state.showOptions ? '' : 'hide'}>
-        <div className='autoSelect'>
-          <ul className='styleList'>
+      <div className={this.state.showOptions ? 'reactDatalist_show' : 'reactDatalist_hide'}>
+        <div className='reactDatalist_options'>
+          <ul className='reactDatalist_options_list'>
             {options}
           </ul>
         </div>
@@ -108,12 +104,10 @@ class DataList extends Component {
 
   render() {
     return (
-      <div className='row'>
-        <div className='columns medium-4'>
-          <input ref={(input) => { this.nameInput = input; }} type='text' className='noBottomMargin' onSelect={() => this.handleShowOptions()} onBlur={() => this.handleOnBlur()} onChange={this.handleChange.bind(this)} value={this.state.inputFieldText} />
+      <div className='reactDatalist'>
+          <input ref={(input) => { this.nameInput = input; }} className='reactDatalist_input' onSelect={() => this.handleShowOptions()} onBlur={() => this.handleOnBlur()} onChange={this.handleChange.bind(this)} value={this.state.inputFieldText} />
           {this.renderOptions()}
           <input type='hidden' name={this.props.selectedIdName} value={this.state.selectedOptionId} />
-        </div>
       </div>
     );
   }
@@ -121,14 +115,14 @@ class DataList extends Component {
 }
 
 DataList.propTypes = {
-  options: PropTypes.array,
-  url: PropTypes.string,
-  id: PropTypes.string,
-  value1: PropTypes.string,
-  value2: PropTypes.string,
-  onOptionChange: PropTypes.func,
-  selectedIdName: PropTypes.string,
-  selectedId:PropTypes.string,
+  options: PropTypes.array.isRequired,
+  url: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  value1: PropTypes.string.isRequired,
+  value2: PropTypes.string.isRequired,
+  onOptionChange: PropTypes.func.isRequired,
+  selectedIdName: PropTypes.string.isRequired,
+  selectedId:PropTypes.string.isRequired,
 };
 
 export default DataList;
