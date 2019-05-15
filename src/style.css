@@ -32,6 +32,7 @@
   height: 20px;
   margin:8px 1px;
   padding:3px 2px;
+  box-sizing: initial;
 }
 
 
@@ -42,13 +43,18 @@
   float: left !important;
 }
 
+.reactDatalist_options_list li a{
+  color:#000!important;
+  box-sizing: initial;
+}
 
 .reactDatalist_options_list li:hover{
   background-color: #0581C2;
   border-radius: 2px;
-  color:#FFF;
+  color:#FFF!important;
 }
 
-.styleList li a{
-  color:#000;
+.reactDatalist_options_list li:hover a{
+  color:#FFF!important;
 }
+
