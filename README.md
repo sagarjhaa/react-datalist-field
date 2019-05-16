@@ -10,7 +10,7 @@ npm install react-datalist-field --save
 
 ### Demo
 
-[demolink](https://www.demolinkreact-datalist-field.com)
+[demolink](https://wk9i5.codesandbox.io/)
 
 ### Usage
 
@@ -47,8 +47,6 @@ function YourComponent() {
 ```
 
 ### Styling
-
-v5 introduces a new styling api powered by [emotion](https://emotion.sh/)
 
 ### styling DataList
 |class name                                     |description|
