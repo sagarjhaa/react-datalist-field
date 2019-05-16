@@ -22,12 +22,12 @@ class DataList extends Component {
     if (nextProps.selectedId) {
       var selected_item = this.props.options.filter((value) => value[this.props.id] == nextProps.selectedId)[0];
       if (selected_item != undefined) {
-        this.setState({ selectedOptionId: selected_item[this.props.id], inputFieldText: selected_item.display_name });
+        this.setState({ selectedOptionId: selected_item[this.props.id], inputFieldText: selected_item[this.props.value1] });
       }
     }
-    else {
-      this.setState({ selectedOptionId: 0, inputFieldText: '' });
-    }
+    // else {
+    //   this.setState({ selectedOptionId: 0, inputFieldText: '' });
+    // }
   }
 
   handleOnBlur() {
@@ -65,7 +65,7 @@ class DataList extends Component {
   handleSelect(index) {
     var selected_item = this.props.options.filter((value) => value[this.props.id] == index)[0];
     if (selected_item != undefined) {
-      this.setState({ selectedOptionId: selected_item[this.props.id], inputFieldText: selected_item.display_name }, () => this.props.onOptionChange());
+      this.setState({ selectedOptionId: selected_item[this.props.id], inputFieldText: selected_item[this.props.value1] }, () => this.props.onOptionChange());
       this.handleHideOptions();
     }
   }
@@ -82,7 +82,7 @@ class DataList extends Component {
     if (!this.state.showMoreOptions) {
       if(options.length > 10){
         options = options.slice(0,10);
-        options.push(<li key='11' onMouseDown={() => this.handleMoreOptions()}><a>more options</a></li>);
+        options.push(<li key='-1' onMouseDown={() => this.handleMoreOptions()}><a>more options</a></li>);
       }
     }
     
@@ -105,7 +105,9 @@ class DataList extends Component {
   render() {
     return (
       <div className='reactDatalist'>
-          <input ref={(input) => { this.nameInput = input; }} className='reactDatalist_input' onSelect={() => this.handleShowOptions()} onBlur={() => this.handleOnBlur()} onChange={this.handleChange.bind(this)} value={this.state.inputFieldText} />
+          <input type='text' ref={(input) => { this.nameInput = input; }} className='reactDatalist_input' 
+          onSelect={() => this.handleShowOptions()} onBlur={() => this.handleOnBlur()} 
+          onChange={this.handleChange.bind(this)} value={this.state.inputFieldText} />
           {this.renderOptions()}
           <input type='hidden' name={this.props.selectedIdName} value={this.state.selectedOptionId} />
       </div>
@@ -116,7 +118,6 @@ class DataList extends Component {
 
 DataList.propTypes = {
   options: PropTypes.array.isRequired,
-  url: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   value1: PropTypes.string.isRequired,
   value2: PropTypes.string.isRequired,
