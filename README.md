@@ -1,4 +1,6 @@
-# react-datalist-field
+# react-datalist-field [demolink](https://wk9i5.codesandbox.io/)
+
+[![Edit react-datalist-field](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/reactdatalistfield-wk9i5?fontsize=14)
 
 React datalist component
 
