@@ -1,2 +1,4 @@
 node_modules
 *.map
+build/index.js
+/index.js
