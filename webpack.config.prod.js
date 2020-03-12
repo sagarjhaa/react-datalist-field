@@ -10,6 +10,9 @@ let prod = {
     libraryTarget: 'commonjs2',
     library:'react-datalist-field'
   },
+  externals: {
+    'react': 'commonjs react' 
+  }
 }
 
 module.exports = merge(base,prod);

@@ -8,13 +8,12 @@ let dev = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'index.js',
-    libraryTarget: 'commonjs2',
-    library:'react-datalist-field'
+    library:'react_datalist_field'
   },
   devServer:{
     contentBase:path.join(__dirname,'build'),
     port:9000,
-    open:true
+    open:false
   }
 }
 
