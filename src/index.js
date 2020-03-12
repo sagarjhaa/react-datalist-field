@@ -25,7 +25,7 @@ var cars = [
 class DataListExample {
   constructor (options) {
 		if (typeof options === "undefined") options = {};
-		options.el = options.el || document.body;
+		options.el = options.el || document.getElementById('example');
 
 		ReactDOM.render(React.createElement(DataList, {
 			options:cars,
@@ -33,7 +33,8 @@ class DataListExample {
       left:'model',
       right:'company',
       selectedIdName:'selectedCar',
-      selectedId:''
+      selectedId:'',
+      onOptionChange:{}
 		}), options.el);
 	}
 }
