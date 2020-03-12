@@ -22,8 +22,20 @@ var cars = [
   { id: 17, model: "Comanche", company: "Jeep" }
 ];
 
-var DataListExample = () => <DataList options={cars} id="id" left="model" right='company' selectedIdName='selectedCar' selectedId=""></DataList>
+class DataListExample {
+  constructor (options) {
+		if (typeof options === "undefined") options = {};
+		options.el = options.el || document.body;
 
-// ReactDOM.render(<DataListExample></DataListExample>,document.getElementById('data-list-example'));
+		ReactDOM.render(React.createElement(DataList, {
+			options:cars,
+      id:'id',
+      left:'model',
+      right:'company',
+      selectedIdName:'selectedCar',
+      selectedId:''
+		}), options.el);
+	}
+}
 
-export default DataList;
+export {DataListExample,DataList};
