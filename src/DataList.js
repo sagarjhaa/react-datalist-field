@@ -15,19 +15,30 @@ class DataList extends Component {
       selectedOptionId: '',
       isMoreOptionClicked:false,
       showMoreOptions: false,
+      searchString:''
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedId) {
-      var selected_item = this.props.options.filter((value) => value[this.props.id] == nextProps.selectedId)[0];
+  componentDidUpdate(prevProps) {
+    if (prevProps.selectedId != this.props.selectedId) {
+      var selected_item = this.props.options.filter((value) => value[this.props.id] == this.props.selectedId)[0];
       if (selected_item != undefined) {
-        this.setState({ selectedOptionId: selected_item[this.props.id], inputFieldText: selected_item[this.props.left] });
+        let searchString = this._handleGetSearchString(selected_item[this.props.left]);
+        
+        this.setState({ 
+          selectedOptionId: selected_item[this.props.id], 
+          inputFieldText: selected_item[this.props.left], 
+          searchString:searchString });
       }
     }
     // else {
     //   this.setState({ selectedOptionId: 0, inputFieldText: '' });
     // }
+  }
+
+  _handleGetSearchString(input_value){
+    let searchString = [...input_value].map(char => /[()]/g.test(char) ? '\\'+char : char).join('');
+    return searchString;
   }
 
   handleOnBlur() {
@@ -59,12 +70,18 @@ class DataList extends Component {
   }
 
   handleChange(e) {
-    var input_value = e.target.value;
+    var input_value = e.target.value;  
     if (input_value != '') {
-      this.setState({ inputFieldText: input_value});
+      if (/[()]/g.test(input_value)){
+        let searchString = this._handleGetSearchString(input_value);
+        this.setState({ inputFieldText: input_value,searchString:searchString});
+      }
+      else{
+        this.setState({ inputFieldText: input_value,searchString:input_value});
+      }
     }
     else {
-      this.setState({ inputFieldText: input_value, selectedOptionId: 0 }, this._handleonOptionChange());
+      this.setState({ inputFieldText: input_value, selectedOptionId: 0,searchString:'' }, this._handleonOptionChange());
     }
   }
 
@@ -79,7 +96,8 @@ class DataList extends Component {
   renderOptions() {
     var options; 
     options = this.props.options
-        .filter((value) => RegExp('^' + this.state.inputFieldText + '.*', 'i').test(value[this.props.right]) || RegExp('^' + this.state.inputFieldText + '.*', 'i').test(value[this.props.left]))
+        .filter((value) => RegExp('^' + this.state.searchString + '.*', 'i').test(value[this.props.right]) || 
+                           RegExp('^' + this.state.searchString + '.*', 'i').test(value[this.props.left]))
         .map((option) => {
           return <li value={option[this.props.left]} key={option[this.props.id]} className='clearfix' onMouseDown={() => this.handleSelect(option[this.props.id])}>
             <a> <span className='float-left'>{option[this.props.left]} </span><span className='float-right'>{option[this.props.right]}</span> </a>
@@ -91,12 +109,8 @@ class DataList extends Component {
         options.push(<li key='-1' onMouseDown={() => this.handleMoreOptions()}><a>more options</a></li>);
       }
     }
-    
 
-    
-    
     return (
-   
       <div className={this.state.showOptions ? 'reactDatalist_show' : 'reactDatalist_hide'}>
         <div className='reactDatalist_options'>
           <ul className='reactDatalist_options_list'>
@@ -104,7 +118,6 @@ class DataList extends Component {
           </ul>
         </div>
       </div>
-   
     );
   }
 
