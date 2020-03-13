@@ -52,20 +52,26 @@ class DataList extends Component {
     this.setState({ isMoreOptionClicked:true,showMoreOptions: true});
   }
 
+  _handleonOptionChange(){
+    if ('onOptionChange' in this.props && typeof this.props.onOptionChange == 'function' ){
+      this.props.onOptionChange();
+    }
+  }
+
   handleChange(e) {
     var input_value = e.target.value;
     if (input_value != '') {
       this.setState({ inputFieldText: input_value});
     }
     else {
-      this.setState({ inputFieldText: input_value, selectedOptionId: 0 }, () => this.props.onOptionChange());
+      this.setState({ inputFieldText: input_value, selectedOptionId: 0 }, this._handleonOptionChange());
     }
   }
 
   handleSelect(index) {
     var selected_item = this.props.options.filter((value) => value[this.props.id] == index)[0];
     if (selected_item != undefined) {
-      this.setState({ selectedOptionId: selected_item[this.props.id], inputFieldText: selected_item[this.props.left] }, () => this.props.onOptionChange());
+      this.setState({ selectedOptionId: selected_item[this.props.id], inputFieldText: selected_item[this.props.left] }, this._handleonOptionChange());
       this.handleHideOptions();
     }
   }
@@ -121,7 +127,7 @@ DataList.propTypes = {
   id: PropTypes.string.isRequired,
   left: PropTypes.string.isRequired,
   right: PropTypes.string.isRequired,
-  onOptionChange: PropTypes.func.isRequired,
+  onOptionChange: PropTypes.func,
   selectedIdName: PropTypes.string.isRequired,
   selectedId:PropTypes.string.isRequired,
 };
