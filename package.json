@@ -1,6 +1,6 @@
 {
   "name": "react-datalist-field",
-  "version": "2.0.0",
+  "version": "20.3.0",
   "description": "Datalist implementation for all browsers",
   "main": "index.js",
   "scripts": {
