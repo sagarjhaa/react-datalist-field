@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import DataList from './DataList';
 
@@ -22,7 +22,7 @@ var cars = [
   { id: 17, model: "Comanche", company: "Jeep" }
 ];
 
-class DataListExample {
+class DataListExampleDev {
   constructor (options) {
 		if (typeof options === "undefined") options = {};
     options.el = options.el || document.getElementById('example');
@@ -33,9 +33,57 @@ class DataListExample {
       left:'model',
       right:'company',
       selectedIdName:'selectedCar',
-      selectedId:''
-		}), options.el);
-	}
+      selectedId:'',
+      onOptionChange:this.handleSelection
+    }), options.el);
+  }
+  
+  handleSelection(){
+    let selection = document.getElementsByName('selectedCar')[0];
+    if (document.getElementById('demo') == null){
+      let p = document.createElement("h3");
+      p.id = 'demo';
+      if (selection.value !== null && selection.value !== ''){
+        p.innerHTML = 'Selected value = '+ selection.value.toString();
+        document.body.appendChild(p);
+      }
+    }
+    else{
+      let p = document.getElementById('demo');
+      if (selection !== null){
+        p.innerHTML = 'Selected value = '+ selection.value.toString();
+      }
+    }
+  };
 }
 
-export {DataListExample,DataList};
+class DataListExample extends Component{
+  constructor(){
+    this.state = {
+      selectedValue: ''
+    }
+  }
+
+  handleChange(){
+    var element = document.getElementsByName('selectedCar')[0]
+    this.setState({selectedValue:element.value});
+  }
+
+  render(){
+    <div>
+    <DataList 
+      options={cars} 
+      id='id' 
+      left='model' 
+      right='company' 
+      selectedIdName='selectedCar' 
+      selectedId='' 
+      onOptionChange={this.handleChange} 
+    />
+
+    <p>You have selected option: {this.state.selectedValue}</p>
+    </div>
+  }
+}
+
+export {DataListExampleDev,DataListExample,DataList};
