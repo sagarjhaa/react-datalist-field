@@ -58,7 +58,8 @@ class DataListExampleDev {
 }
 
 class DataListExample extends Component{
-  constructor(){
+  constructor(props){
+    super(props);
     this.state = {
       selectedValue: ''
     }
