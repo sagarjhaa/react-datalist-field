@@ -63,7 +63,7 @@ class DataList extends Component {
     this.setState({ isMoreOptionClicked:true,showMoreOptions: true});
   }
 
-  _handleonOptionChange(){
+  componentDidUpdate(){
     if ('onOptionChange' in this.props && typeof this.props.onOptionChange == 'function' ){
       this.props.onOptionChange();
     }
@@ -81,14 +81,14 @@ class DataList extends Component {
       }
     }
     else {
-      this.setState({ inputFieldText: input_value, selectedOptionId: 0,searchString:'' }, this._handleonOptionChange());
+      this.setState({ inputFieldText: input_value, selectedOptionId: 0,searchString:'' });
     }
   }
 
   handleSelect(index) {
     var selected_item = this.props.options.filter((value) => value[this.props.id] == index)[0];
     if (selected_item != undefined) {
-      this.setState({ selectedOptionId: selected_item[this.props.id], inputFieldText: selected_item[this.props.left] }, this._handleonOptionChange());
+      this.setState({ selectedOptionId: selected_item[this.props.id], inputFieldText: selected_item[this.props.left] });
       this.handleHideOptions();
     }
   }
