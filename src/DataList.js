@@ -9,36 +9,62 @@ class DataList extends Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.handleMoreOptions = this.handleMoreOptions.bind(this);
 
+    let inputFieldText = this._handleGetInputValue(this.props.selectedId) ;
+    inputFieldText = inputFieldText == undefined ? '': inputFieldText[this.props.left];
+    
     this.state = {
       showOptions: false,
-      inputFieldText: '',
-      selectedOptionId: '',
+      inputFieldText: inputFieldText,
+      selectedOptionId: this.props.selectedId,
       isMoreOptionClicked:false,
       showMoreOptions: false,
       searchString:''
     };
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.selectedId != this.props.selectedId) {
-      var selected_item = this.props.options.filter((value) => value[this.props.id] == this.props.selectedId)[0];
+  componentDidUpdate(prevProps,prevState) {
+    
+    //state: change is internal
+    if (prevState.selectedOptionId != this.state.selectedOptionId) {
+      var selected_item = this._handleGetInputValue(this.state.selectedOptionId);
       if (selected_item != undefined) {
-        let searchString = this._handleGetSearchString(selected_item[this.props.left]);
-        
         this.setState({ 
           selectedOptionId: selected_item[this.props.id], 
           inputFieldText: selected_item[this.props.left], 
-          searchString:searchString });
+          searchString:'' });
+      }
+      
+      if ('onOptionChange' in this.props && typeof this.props.onOptionChange == 'function' ){
+        this.props.onOptionChange();
       }
     }
-    // else {
-    //   this.setState({ selectedOptionId: 0, inputFieldText: '' });
+    else if(this.state.showOptions == false){
+      //Closing the dropdown
+      if (this.state.searchString != ''){
+        var selected_item = this._handleGetInputValue(this.state.selectedOptionId);
+        if (selected_item == undefined){
+          this.setState({inputFieldText:'',searchString:''});
+        }
+        else{
+          this.setState({inputFieldText:selected_item[this.props.left],searchString:''});
+        }
+      }
+    }
+    
+    //props: change is external
+    // if (prevProps != this.props){
+    //   console.log('propsChanged');
     // }
   }
 
   _handleGetSearchString(input_value){
     let searchString = [...input_value].map(char => /[()]/g.test(char) ? '\\'+char : char).join('');
     return searchString;
+  }
+
+  _handleGetInputValue(index){
+    let selectedInputValue= this.props.options.filter((value) => value[this.props.id] == index)[0];
+    return selectedInputValue;
   }
 
   handleOnBlur() {
@@ -63,12 +89,6 @@ class DataList extends Component {
     this.setState({ isMoreOptionClicked:true,showMoreOptions: true});
   }
 
-  componentDidUpdate(){
-    if ('onOptionChange' in this.props && typeof this.props.onOptionChange == 'function' ){
-      this.props.onOptionChange();
-    }
-  }
-
   handleChange(e) {
     var input_value = e.target.value;  
     if (input_value != '') {
@@ -86,9 +106,9 @@ class DataList extends Component {
   }
 
   handleSelect(index) {
-    var selected_item = this.props.options.filter((value) => value[this.props.id] == index)[0];
+    var selected_item = this._handleGetInputValue(index);
     if (selected_item != undefined) {
-      this.setState({ selectedOptionId: selected_item[this.props.id], inputFieldText: selected_item[this.props.left] });
+      this.setState({ selectedOptionId: selected_item[this.props.id], inputFieldText: selected_item[this.props.left],searchString:'' });
       this.handleHideOptions();
     }
   }

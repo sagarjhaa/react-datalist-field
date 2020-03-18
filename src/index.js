@@ -23,68 +23,80 @@ var cars = [
 ];
 
 class DataListExampleDev {
-  constructor (options) {
-		if (typeof options === "undefined") options = {};
+  constructor(options) {
+    if (typeof options === "undefined") options = {};
     options.el = options.el || document.getElementById('example');
 
-		ReactDOM.render(React.createElement(DataList, {
-			options:cars,
-      id:'id',
-      left:'model',
-      right:'company',
-      selectedIdName:'selectedCar',
-      selectedId:'',
-      onOptionChange:this.handleSelection
+    ReactDOM.render(React.createElement(DataList, {
+      options: cars,
+      id: 'id',
+      left: 'model',
+      right: 'company',
+      selectedIdName: 'selectedCar',
+      selectedId: '',
+      onOptionChange: this.handleSelection
     }), options.el);
   }
-  
-  handleSelection(){
+
+  handleSelection() {
     let selection = document.getElementsByName('selectedCar')[0];
-    if (document.getElementById('demo') == null){
+    if (document.getElementById('demo') == null) {
       let p = document.createElement("h3");
       p.id = 'demo';
-      if (selection.value !== null && selection.value !== ''){
-        p.innerHTML = 'Selected value = '+ selection.value.toString();
+      if (selection.value !== null && selection.value !== '') {
+        p.innerHTML = 'Selected value = ' + selection.value.toString();
         document.body.appendChild(p);
       }
     }
-    else{
+    else {
       let p = document.getElementById('demo');
-      if (selection !== null){
-        p.innerHTML = 'Selected value = '+ selection.value.toString();
+      if (selection !== null) {
+        p.innerHTML = 'Selected value = ' + selection.value.toString();
       }
     }
   };
 }
 
-class DataListExample extends Component{
-  constructor(props){
+class DataListExample extends Component {
+  constructor(props) {
     super(props);
     this.state = {
       selectedValue: ''
+      ,count:0
     }
+    this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  handleChange(){
-    var element = document.getElementsByName('selectedCar')[0]
-    this.setState({selectedValue:element.value});
+  handleChange() {
+    var element = document.getElementsByName('selectedCar')[0];
+    this.setState({ selectedValue: element.value });
   }
 
-  render(){
-    <div>
-    <DataList 
-      options={cars} 
-      id='id' 
-      left='model' 
-      right='company' 
-      selectedIdName='selectedCar' 
-      selectedId='' 
-      onOptionChange={this.handleChange} 
-    />
+  handleClick(){
+    var count = this.state.count;
+    this.setState({count:count+1});
+  }
 
-    <p>You have selected option: {this.state.selectedValue}</p>
-    </div>
+  render() {
+    
+    return (
+      <div>
+        <DataList
+          options={cars}
+          id='id'
+          left='model'
+          right='company'
+          selectedIdName='selectedCar'
+          selectedId=''
+          onOptionChange={this.handleChange}
+        />
+        {/* <button onClick={this.handleClick}>Click Me</button>
+        <h3>{this.state.count}</h3> */}
+        <p>You have selected option: {this.state.selectedValue}</p>
+      </div>
+    )
   }
 }
 
-export {DataListExampleDev,DataListExample,DataList};
+export { DataListExampleDev, DataListExample, DataList };
