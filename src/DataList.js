@@ -155,8 +155,8 @@ class DataList extends Component {
       }
     }
 
-    if (options.length == 0 && this.props.setNewValue) {
-      options.push(<li value={this.state.inputFieldText} key='0' className='clearfix' onMouseDown={() => this.handleNewValue()}>
+    if (this.props.setNewValue && this.state.inputFieldText != '') {
+      options.unshift(<li value={this.state.inputFieldText} key='0' className='clearfix' onMouseDown={() => this.handleNewValue()}>
         <a><span className='float-left'>{this.state.inputFieldText} </span></a></li>);
     }
 
