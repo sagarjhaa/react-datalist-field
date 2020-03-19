@@ -23,7 +23,6 @@ class DataList extends Component {
   }
 
   componentDidUpdate(prevProps,prevState) {
-    
     //state: change is internal
     if (prevState.selectedOptionId != this.state.selectedOptionId) {
       var selected_item = this._handleGetInputValue(this.state.selectedOptionId);
@@ -38,7 +37,23 @@ class DataList extends Component {
         this.props.onOptionChange();
       }
     }
-    else if(this.state.showOptions == false){
+    // props: change is external
+    else if (prevProps.selectedId != this.props.selectedId){
+      var selected_item = this._handleGetInputValue(this.props.selectedId);
+      if (selected_item != undefined) {
+        this.setState({ 
+          selectedOptionId: selected_item[this.props.id], 
+          inputFieldText: selected_item[this.props.left], 
+          searchString:'' });
+      }
+      else{
+        this.setState({ 
+          selectedOptionId: '', 
+          inputFieldText: '', 
+          searchString:'' });
+      }
+    }
+    else if(this.state.showOptions == false && prevState.showOptions == true){
       //Closing the dropdown
       if (this.state.searchString != ''){
         var selected_item = this._handleGetInputValue(this.state.selectedOptionId);
@@ -50,11 +65,6 @@ class DataList extends Component {
         }
       }
     }
-    
-    //props: change is external
-    // if (prevProps != this.props){
-    //   console.log('propsChanged');
-    // }
   }
 
   _handleGetSearchString(input_value){
@@ -144,6 +154,7 @@ class DataList extends Component {
   render() {
     return (
       <div className='reactDatalist'>
+        {this.state.selectedOptionId}
           <input type='text' ref={(input) => { this.nameInput = input; }} className='reactDatalist_input' 
           onSelect={() => this.handleShowOptions()} onBlur={() => this.handleOnBlur()} 
           onChange={this.handleChange.bind(this)} value={this.state.inputFieldText} />
