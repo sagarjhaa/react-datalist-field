@@ -48,6 +48,9 @@ class DataList extends Component {
           inputFieldText: selected_item[this.props.left], 
           searchString:'' });
       }
+      else if(this.props.setNewValue == true){
+        this.setState({inputFieldText: this.props.selectedId});
+      }
       else{
         this.setState({ 
           selectedOptionId: '', 
@@ -119,7 +122,7 @@ class DataList extends Component {
       }
     }
     else {
-      this.setState({ inputFieldText: input_value, selectedOptionId: 0,searchString:'' });
+      this.setState({ inputFieldText: input_value, selectedOptionId:'',searchString:'' });
     }
   }
 
