@@ -34,7 +34,9 @@ class DataListExampleDev {
       right: 'company',
       selectedIdName: 'selectedCar',
       selectedId: '',
-      onOptionChange: this.handleSelection
+      onOptionChange: this.handleSelection,
+      dev:true,
+      setNewValue:true
     }), options.el);
   }
 
