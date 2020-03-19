@@ -25,6 +25,7 @@ class DataList extends Component {
   componentDidUpdate(prevProps,prevState) {
     //state: change is internal
     if (prevState.selectedOptionId != this.state.selectedOptionId) {
+      // console.log('state');
       var selected_item = this._handleGetInputValue(this.state.selectedOptionId);
       if (selected_item != undefined) {
         this.setState({ 
@@ -39,6 +40,7 @@ class DataList extends Component {
     }
     // props: change is external
     else if (prevProps.selectedId != this.props.selectedId){
+      // console.log('props');
       var selected_item = this._handleGetInputValue(this.props.selectedId);
       if (selected_item != undefined) {
         this.setState({ 
@@ -55,10 +57,16 @@ class DataList extends Component {
     }
     else if(this.state.showOptions == false && prevState.showOptions == true){
       //Closing the dropdown
+      // console.log('dropdown');
       if (this.state.searchString != ''){
         var selected_item = this._handleGetInputValue(this.state.selectedOptionId);
         if (selected_item == undefined){
-          this.setState({inputFieldText:'',searchString:''});
+          if (this.props.setNewValue == true){
+            this.setState({inputFieldText:this.state.selectedOptionId,searchString:''});
+          }
+          else{
+            this.setState({inputFieldText:'',searchString:''});
+          }
         }
         else{
           this.setState({inputFieldText:selected_item[this.props.left],searchString:''});
@@ -123,6 +131,10 @@ class DataList extends Component {
     }
   }
 
+  handleNewValue(){
+    this.setState({selectedOptionId: this.state.inputFieldText });
+  }
+
   renderOptions() {
     var options; 
     options = this.props.options
@@ -140,6 +152,11 @@ class DataList extends Component {
       }
     }
 
+    if (options.length == 0 && this.props.setNewValue) {
+      options.push(<li value={this.state.inputFieldText} key='0' className='clearfix' onMouseDown={() => this.handleNewValue()}>
+        <a><span className='float-left'>{this.state.inputFieldText} </span></a></li>);
+    }
+
     return (
       <div className={this.state.showOptions ? 'reactDatalist_show' : 'reactDatalist_hide'}>
         <div className='reactDatalist_options'>
@@ -152,6 +169,7 @@ class DataList extends Component {
   }
 
   render() {
+    let isDev = this.props.dev == true ? <p>option selected: {this.state.selectedOptionId}</p>: ''
     return (
       <div className='reactDatalist'>
           <input type='text' ref={(input) => { this.nameInput = input; }} className='reactDatalist_input' 
@@ -159,6 +177,7 @@ class DataList extends Component {
           onChange={this.handleChange.bind(this)} value={this.state.inputFieldText} />
           {this.renderOptions()}
           <input type='hidden' name={this.props.selectedIdName} value={this.state.selectedOptionId} />
+          {isDev}
       </div>
     );
   }
@@ -173,6 +192,13 @@ DataList.propTypes = {
   onOptionChange: PropTypes.func,
   selectedIdName: PropTypes.string.isRequired,
   selectedId:PropTypes.string.isRequired,
+  setNewValue:PropTypes.bool,
+  dev:PropTypes.bool
+};
+
+DataList.defaultProps = {
+  setNewValue:false,
+  dev:false
 };
 
 export default DataList;
