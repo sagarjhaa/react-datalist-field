@@ -9,36 +9,83 @@ class DataList extends Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.handleMoreOptions = this.handleMoreOptions.bind(this);
 
+    let inputFieldText = this._handleGetInputValue(this.props.selectedId) ;
+    inputFieldText = inputFieldText == undefined ? '': inputFieldText[this.props.left];
+    
     this.state = {
       showOptions: false,
-      inputFieldText: '',
-      selectedOptionId: '',
+      inputFieldText: inputFieldText,
+      selectedOptionId: this.props.selectedId,
       isMoreOptionClicked:false,
       showMoreOptions: false,
       searchString:''
     };
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.selectedId != this.props.selectedId) {
-      var selected_item = this.props.options.filter((value) => value[this.props.id] == this.props.selectedId)[0];
+  componentDidUpdate(prevProps,prevState) {
+    //state: change is internal
+    if (prevState.selectedOptionId != this.state.selectedOptionId) {
+      // console.log('state');
+      var selected_item = this._handleGetInputValue(this.state.selectedOptionId);
       if (selected_item != undefined) {
-        let searchString = this._handleGetSearchString(selected_item[this.props.left]);
-        
         this.setState({ 
           selectedOptionId: selected_item[this.props.id], 
           inputFieldText: selected_item[this.props.left], 
-          searchString:searchString });
+          searchString:'' });
+      }
+      
+      if ('onOptionChange' in this.props && typeof this.props.onOptionChange == 'function' ){
+        this.props.onOptionChange();
       }
     }
-    // else {
-    //   this.setState({ selectedOptionId: 0, inputFieldText: '' });
-    // }
+    // props: change is external
+    else if (prevProps.selectedId != this.props.selectedId){
+      // console.log('props');
+      var selected_item = this._handleGetInputValue(this.props.selectedId);
+      if (selected_item != undefined) {
+        this.setState({ 
+          selectedOptionId: selected_item[this.props.id], 
+          inputFieldText: selected_item[this.props.left], 
+          searchString:'' });
+      }
+      else if(this.props.setNewValue == true){
+        this.setState({inputFieldText: this.props.selectedId});
+      }
+      else{
+        this.setState({ 
+          selectedOptionId: '', 
+          inputFieldText: '', 
+          searchString:'' });
+      }
+    }
+    else if(this.state.showOptions == false && prevState.showOptions == true){
+      //Closing the dropdown
+      // console.log('dropdown');
+      if (this.state.searchString != ''){
+        var selected_item = this._handleGetInputValue(this.state.selectedOptionId);
+        if (selected_item == undefined){
+          if (this.props.setNewValue == true){
+            this.setState({inputFieldText:this.state.selectedOptionId,searchString:''});
+          }
+          else{
+            this.setState({inputFieldText:'',searchString:''});
+          }
+        }
+        else{
+          this.setState({inputFieldText:selected_item[this.props.left],searchString:''});
+        }
+      }
+    }
   }
 
   _handleGetSearchString(input_value){
     let searchString = [...input_value].map(char => /[()]/g.test(char) ? '\\'+char : char).join('');
     return searchString;
+  }
+
+  _handleGetInputValue(index){
+    let selectedInputValue= this.props.options.filter((value) => value[this.props.id] == index)[0];
+    return selectedInputValue;
   }
 
   handleOnBlur() {
@@ -63,12 +110,6 @@ class DataList extends Component {
     this.setState({ isMoreOptionClicked:true,showMoreOptions: true});
   }
 
-  componentDidUpdate(){
-    if ('onOptionChange' in this.props && typeof this.props.onOptionChange == 'function' ){
-      this.props.onOptionChange();
-    }
-  }
-
   handleChange(e) {
     var input_value = e.target.value;  
     if (input_value != '') {
@@ -81,16 +122,20 @@ class DataList extends Component {
       }
     }
     else {
-      this.setState({ inputFieldText: input_value, selectedOptionId: 0,searchString:'' });
+      this.setState({ inputFieldText: input_value, selectedOptionId:'',searchString:'' });
     }
   }
 
   handleSelect(index) {
-    var selected_item = this.props.options.filter((value) => value[this.props.id] == index)[0];
+    var selected_item = this._handleGetInputValue(index);
     if (selected_item != undefined) {
-      this.setState({ selectedOptionId: selected_item[this.props.id], inputFieldText: selected_item[this.props.left] });
+      this.setState({ selectedOptionId: selected_item[this.props.id], inputFieldText: selected_item[this.props.left],searchString:'' });
       this.handleHideOptions();
     }
+  }
+
+  handleNewValue(){
+    this.setState({selectedOptionId: this.state.inputFieldText });
   }
 
   renderOptions() {
@@ -110,6 +155,11 @@ class DataList extends Component {
       }
     }
 
+    if (options.length == 0 && this.props.setNewValue) {
+      options.push(<li value={this.state.inputFieldText} key='0' className='clearfix' onMouseDown={() => this.handleNewValue()}>
+        <a><span className='float-left'>{this.state.inputFieldText} </span></a></li>);
+    }
+
     return (
       <div className={this.state.showOptions ? 'reactDatalist_show' : 'reactDatalist_hide'}>
         <div className='reactDatalist_options'>
@@ -122,6 +172,7 @@ class DataList extends Component {
   }
 
   render() {
+    let isDev = this.props.dev == true ? <p>option selected: {this.state.selectedOptionId}</p>: ''
     return (
       <div className='reactDatalist'>
           <input type='text' ref={(input) => { this.nameInput = input; }} className='reactDatalist_input' 
@@ -129,6 +180,7 @@ class DataList extends Component {
           onChange={this.handleChange.bind(this)} value={this.state.inputFieldText} />
           {this.renderOptions()}
           <input type='hidden' name={this.props.selectedIdName} value={this.state.selectedOptionId} />
+          {isDev}
       </div>
     );
   }
@@ -143,6 +195,13 @@ DataList.propTypes = {
   onOptionChange: PropTypes.func,
   selectedIdName: PropTypes.string.isRequired,
   selectedId:PropTypes.string.isRequired,
+  setNewValue:PropTypes.bool,
+  dev:PropTypes.bool
+};
+
+DataList.defaultProps = {
+  setNewValue:false,
+  dev:false
 };
 
 export default DataList;
