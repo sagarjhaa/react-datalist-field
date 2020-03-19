@@ -154,7 +154,6 @@ class DataList extends Component {
   render() {
     return (
       <div className='reactDatalist'>
-        {this.state.selectedOptionId}
           <input type='text' ref={(input) => { this.nameInput = input; }} className='reactDatalist_input' 
           onSelect={() => this.handleShowOptions()} onBlur={() => this.handleOnBlur()} 
           onChange={this.handleChange.bind(this)} value={this.state.inputFieldText} />
