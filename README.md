@@ -87,8 +87,8 @@ function YourComponent() {
 
 ### For Developers :computer:  :sunglasses:
 
-#####1.  Clone the repository from github.
-#####2.  cd /react-datalist-field
-#####3.  npm install         (install packages from package.json)
-#####4.  npm run server      (starts a server on port 9000)
-#####5.  localhost:9000      :rocket:
+##### 1.  Clone the repository from github.
+##### 2.  cd /react-datalist-field
+##### 3.  npm install         (install packages from package.json)
+##### 4.  npm run server      (starts a server on port 9000)
+##### 5.  localhost:9000      :rocket:
