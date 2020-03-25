@@ -69,11 +69,9 @@ function YourComponent() {
 | dev     | boolean   | wen set to true will show the selected option value|false|
 | setNewValue     | boolean   | when set to true will let user add new values to options to select from the datalist. |false|
 
-### Styling
-
-### styling DataList
-|class name                                   
-|----------                                     |-----------|
+### Styling DataList
+|class name|
+|-------|
 |.reactDatalist_input                           |
 |.reactDatalist_show                            |
 |.reactDatalist_hide                            |
@@ -94,4 +92,3 @@ function YourComponent() {
 #####3.  npm install         (install packages from package.json)
 #####4.  npm run server      (starts a server on port 9000)
 #####5.  localhost:9000      :rocket:
-
